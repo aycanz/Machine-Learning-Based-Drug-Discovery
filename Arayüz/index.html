@@ -1,0 +1,2316 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALZCHEM — </title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   DESIGN TOKENS — Light & Clean
+═══════════════════════════════════════════════ */
+:root {
+  /* Backgrounds */
+  --bg:         #f5f7fa;
+  --bg-surface: #ffffff;
+  --bg-raised:  #f0f3f8;
+  --bg-overlay: rgba(255,255,255,0.95);
+
+  /* Brand */
+  --teal:       #0d9488;
+  --teal-light: #99f6e4;
+  --teal-dim:   rgba(13,148,136,0.09);
+  --teal-glow:  rgba(13,148,136,0.18);
+  --teal-bg:    #f0fdf9;
+
+  --violet:     #6366f1;
+  --violet-dim: rgba(99,102,241,0.09);
+  --violet-bg:  #f5f3ff;
+
+  --rose:       #e11d48;
+  --rose-dim:   rgba(225,29,72,0.08);
+  --rose-bg:    #fff1f3;
+
+  --amber:      #d97706;
+  --amber-dim:  rgba(217,119,6,0.1);
+
+  --success:    #059669;
+  --success-dim: rgba(5,150,105,0.09);
+
+  /* Text */
+  --text-primary:   #0f172a;
+  --text-secondary: #475569;
+  --text-muted:     #94a3b8;
+  --text-faint:     #cbd5e1;
+
+  /* Borders */
+  --border:       #e2e8f0;
+  --border-hover: rgba(13,148,136,0.35);
+  --border-focus: #0d9488;
+
+  /* Layout */
+  --sidebar-w: 290px;
+  --topbar-h:  74px;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+
+  /* Shadows */
+  --shadow-sm:   0 1px 3px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04);
+  --shadow-md:   0 4px 16px rgba(15,23,42,0.08), 0 1px 4px rgba(15,23,42,0.04);
+  --shadow-lg:   0 12px 40px rgba(15,23,42,0.10), 0 2px 8px rgba(15,23,42,0.05);
+  --shadow-card: 0 0 0 1px var(--border), 0 4px 16px rgba(15,23,42,0.06);
+  --shadow-focus: 0 0 0 3px rgba(13,148,136,0.15);
+
+  --transition: 180ms cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ═══════════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-raised); }
+::-webkit-scrollbar-thumb { background: var(--text-faint); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ═══════════════════════════════════════════════
+   PAGE ROUTING
+═══════════════════════════════════════════════ */
+.page { display: none; min-height: 100vh; }
+.page.active { display: flex; flex-direction: column; }
+#page-app { flex-direction: row; }
+
+/* ═══════════════════════════════════════════════
+   LOGIN
+═══════════════════════════════════════════════ */
+#page-login {
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 20%, rgba(13,148,136,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(99,102,241,0.05) 0%, transparent 60%),
+    var(--bg);
+  padding: 24px 16px;
+}
+
+.login-wrap {
+  width: 100%;
+  max-width: 420px;
+  animation: fadeUp 0.45s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.login-brand {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.login-brand .logo-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--teal), #0891b2);
+  border-radius: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 24px rgba(13,148,136,0.25);
+}
+
+.login-brand .logo-mark svg { color: white; }
+
+.login-brand .wordmark {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 5px;
+  display: block;
+}
+
+.login-brand .tagline {
+  font-size: 17px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  font-weight: 400;
+}
+
+.login-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 36px 32px;
+  box-shadow: var(--shadow-lg);
+}
+
+/* Auth tabs */
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  background: var(--bg-raised);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  margin-bottom: 28px;
+}
+.auth-tab {
+  padding: 9px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: var(--transition);
+}
+.auth-tab.active {
+  background: var(--bg-surface);
+  color: var(--teal);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Form fields */
+.form-field { margin-bottom: 18px; }
+.form-label {
+  display: block;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 7px;
+}
+.form-input {
+  width: 100%;
+  background: var(--bg-raised);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 11px 14px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 18px;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+.form-input:focus {
+  border-color: var(--border-focus);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-focus);
+}
+.form-input::placeholder { color: var(--text-faint); }
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: var(--teal);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 6px;
+  box-shadow: 0 2px 8px rgba(13,148,136,0.3);
+}
+.btn-primary:hover {
+  background: #0f766e;
+  box-shadow: 0 4px 16px rgba(13,148,136,0.35);
+  transform: translateY(-1px);
+}
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.auth-err {
+  display: none;
+  background: var(--rose-bg);
+  border: 1px solid rgba(225,29,72,0.18);
+  color: var(--rose);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-size: 17px;
+  margin-top: 12px;
+}
+.auth-err.show { display: flex; align-items: center; gap: 8px; }
+
+/* ═══════════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════════ */
+.sidebar {
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 60;
+  overflow-y: auto;
+}
+
+.sb-logo {
+  padding: 22px 20px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sb-logo-mark {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--teal), #0891b2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(13,148,136,0.2);
+}
+
+.sb-logo-text .wordmark {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 3px;
+  display: block;
+  line-height: 1;
+}
+.sb-logo-text .sub {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin-top: 3px;
+  font-weight: 400;
+}
+
+.sb-section {
+  padding: 20px 16px 6px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  margin: 1px 8px;
+  width: calc(100% - 16px);
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: color var(--transition), background var(--transition);
+}
+.nav-item:hover { color: var(--text-primary); background: var(--bg-raised); }
+.nav-item.active {
+  color: var(--teal);
+  background: var(--teal-dim);
+  font-weight: 600;
+}
+.nav-item.admin-nav:hover { color: var(--violet); background: var(--violet-dim); }
+.nav-item.admin-nav.active { color: var(--violet); background: var(--violet-dim); }
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+.nav-item.active .nav-icon { opacity: 1; }
+
+.admin-badge {
+  margin-left: auto;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  background: var(--violet-dim);
+  color: var(--violet);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 99px;
+  padding: 2px 8px;
+}
+
+.admin-only { display: none; }
+.sb-bottom { margin-top: auto; padding: 16px 12px; border-top: 1px solid var(--border); }
+
+/* ═══════════════════════════════════════════════
+   TOPBAR
+═══════════════════════════════════════════════ */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-w);
+  right: 0;
+  height: var(--topbar-h);
+  background: var(--bg-overlay);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  gap: 16px;
+  z-index: 50;
+}
+
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 5px 12px 5px 9px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+.status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--text-faint);
+  transition: background var(--transition);
+}
+.status-dot.online {
+  background: var(--success);
+  box-shadow: 0 0 0 2px rgba(5,150,105,0.2);
+  animation: pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 4px 14px 4px 4px;
+  transition: var(--transition);
+}
+.user-pill:hover { border-color: var(--teal); }
+.user-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal), #0891b2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; font-weight: 700;
+  color: white;
+}
+.user-name { font-size: 17px; font-weight: 600; color: var(--text-primary); }
+.btn-logout {
+  background: none; border: none;
+  color: var(--text-muted);
+  cursor: pointer; font-size: 20px;
+  padding: 4px 2px;
+  transition: color var(--transition);
+  line-height: 1;
+}
+.btn-logout:hover { color: var(--rose); }
+
+/* ═══════════════════════════════════════════════
+   MAIN CONTENT AREA
+═══════════════════════════════════════════════ */
+.content {
+  flex: 1;
+  margin-left: var(--sidebar-w);
+  margin-top: var(--topbar-h);
+  padding: 36px 40px;
+  min-height: calc(100vh - var(--topbar-h));
+}
+
+.view { display: none; animation: fadeUp 0.25s ease both; }
+.view.active { display: block; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+/* ═══════════════════════════════════════════════
+   PAGE HEADER
+═══════════════════════════════════════════════ */
+.page-header { margin-bottom: 32px; }
+.page-header h2 {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.7px;
+  line-height: 1.2;
+}
+.page-header h2 .hl { color: var(--teal); }
+.page-header h2 .hl2 { color: var(--violet); }
+.page-header .desc {
+  font-size: 18px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  font-weight: 400;
+}
+
+/* ═══════════════════════════════════════════════
+   STAT CARDS
+═══════════════════════════════════════════════ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 22px 22px 20px;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.stat-card .sc-icon {
+  width: 40px; height: 40px;
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  margin-bottom: 14px;
+}
+.stat-card .sc-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  letter-spacing: 0.3px;
+}
+.stat-card .sc-val {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text-primary);
+}
+.stat-card .sc-val.v1 { color: var(--teal); }
+.stat-card .sc-val.v2 { color: var(--violet); }
+.stat-card .sc-val.v3 { color: var(--rose); }
+.stat-card .sc-val.v4 { color: var(--amber); }
+.stat-card .sc-sub {
+  font-size: 16px;
+  color: var(--text-muted);
+  margin-top: 5px;
+}
+
+/* ═══════════════════════════════════════════════
+   CARDS
+═══════════════════════════════════════════════ */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 26px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.card-title {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-title small {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════════
+   SMILES INPUT
+═══════════════════════════════════════════════ */
+.smiles-input {
+  width: 100%;
+  background: var(--bg-raised);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 17px;
+  color: var(--teal);
+  outline: none;
+  resize: vertical;
+  min-height: 80px;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+  line-height: 1.8;
+}
+.smiles-input:focus {
+  border-color: var(--border-focus);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-focus);
+}
+.smiles-input::placeholder { color: var(--text-faint); font-family: 'Plus Jakarta Sans', sans-serif; }
+
+/* Chips */
+.chip-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.chip-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.chip {
+  font-size: 16px;
+  font-weight: 500;
+  padding: 5px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all var(--transition);
+}
+.chip:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-dim); }
+
+/* ═══════════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════════ */
+.btn-teal {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 20px;
+  background: var(--teal);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 2px 6px rgba(13,148,136,0.25);
+}
+.btn-teal:hover { background: #0f766e; box-shadow: 0 4px 12px rgba(13,148,136,0.3); transform: translateY(-1px); }
+.btn-teal:active { transform: translateY(0); }
+.btn-teal:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+.btn-violet {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 20px;
+  background: var(--violet);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 2px 6px rgba(99,102,241,0.25);
+}
+.btn-violet:hover { background: #4f46e5; box-shadow: 0 4px 12px rgba(99,102,241,0.3); transform: translateY(-1px); }
+.btn-violet:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn-ghost {
+  padding: 8px 14px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: var(--transition);
+}
+.btn-ghost:hover { color: var(--text-primary); border-color: var(--teal); background: var(--teal-dim); }
+
+/* ═══════════════════════════════════════════════
+   ALERTS
+═══════════════════════════════════════════════ */
+.alert { display: none; padding: 12px 16px; border-radius: var(--radius-md); font-size: 17px; margin-top: 12px; }
+.alert.show { display: flex; align-items: center; gap: 8px; }
+.alert.error { background: var(--rose-bg); color: var(--rose); border: 1px solid rgba(225,29,72,0.15); }
+.alert.success { background: var(--teal-bg); color: var(--teal); border: 1px solid rgba(13,148,136,0.2); }
+
+/* ═══════════════════════════════════════════════
+   RESULT BOX
+═══════════════════════════════════════════════ */
+.result-box {
+  display: none;
+  margin-top: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  animation: fadeUp 0.3s ease both;
+}
+.result-box.show { display: block; }
+
+.result-top {
+  padding: 24px 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.result-top.active { background: linear-gradient(135deg, var(--teal-bg), #fff); border-bottom: 1px solid rgba(13,148,136,0.12); }
+.result-top.inactive { background: linear-gradient(135deg, var(--rose-bg), #fff); border-bottom: 1px solid rgba(225,29,72,0.1); }
+
+.verdict { display: flex; align-items: center; gap: 18px; }
+.verdict-icon {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; font-weight: 700;
+  flex-shrink: 0;
+}
+.verdict-icon.active {
+  background: var(--teal);
+  color: white;
+  box-shadow: 0 4px 16px rgba(13,148,136,0.3);
+}
+.verdict-icon.inactive {
+  background: var(--rose);
+  color: white;
+  box-shadow: 0 4px 16px rgba(225,29,72,0.25);
+}
+.verdict-text .label {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+.verdict-text .label.active { color: var(--teal); }
+.verdict-text .label.inactive { color: var(--rose); }
+.verdict-text .sublabel {
+  font-size: 17px;
+  color: var(--text-muted);
+  margin-top: 3px;
+  font-weight: 400;
+}
+
+.result-metrics {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  padding: 20px 26px;
+  gap: 14px;
+  background: var(--bg-raised);
+}
+.r-metric {
+  text-align: center;
+  padding: 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+.r-metric .val {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--teal);
+}
+.r-metric .lbl {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-top: 4px;
+  letter-spacing: 0.3px;
+}
+
+.prob-wrap { padding: 4px 26px 20px; background: var(--bg-raised); }
+.prob-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.prob-track {
+  height: 6px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.prob-fill { height: 100%; border-radius: 99px; transition: width 1s cubic-bezier(0.4,0,0.2,1); width: 0; }
+.prob-fill.active { background: linear-gradient(90deg, var(--teal-light), var(--teal)); }
+.prob-fill.inactive { background: linear-gradient(90deg, #fda4af, var(--rose)); }
+
+/* ═══════════════════════════════════════════════
+   ChEMBL PANEL
+═══════════════════════════════════════════════ */
+.chembl-panel {
+  margin-top: 20px;
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  animation: fadeUp 0.3s ease both;
+  box-shadow: var(--shadow-sm);
+}
+
+.chembl-hdr {
+  background: var(--violet-bg);
+  border-bottom: 1px solid rgba(99,102,241,0.12);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.chembl-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--violet);
+  flex-shrink: 0;
+}
+.chembl-hdr-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--violet);
+}
+.chembl-id-pill {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  background: rgba(99,102,241,0.1);
+  color: var(--violet);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 99px;
+  padding: 3px 12px;
+  font-weight: 500;
+}
+
+.chembl-body { background: var(--bg-raised); padding: 22px 24px; }
+
+/* ChEMBL tabs */
+.chembl-tabs { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+.ctab {
+  font-size: 16px;
+  font-weight: 600;
+  padding: 7px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 99px;
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.ctab:hover { border-color: var(--violet); color: var(--violet); }
+.ctab.active {
+  background: var(--violet);
+  color: white;
+  border-color: var(--violet);
+  box-shadow: 0 2px 6px rgba(99,102,241,0.2);
+}
+.ctab-panel { display: none; }
+.ctab-panel.active { display: block; }
+
+/* ChEMBL grid / blocks */
+.chem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.chem-block {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+.chem-block-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.chem-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  gap: 16px;
+}
+.chem-key { font-size: 16px; color: var(--text-muted); flex-shrink: 0; font-weight: 500; }
+.chem-val { font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--text-primary); font-weight: 500; text-align: right; }
+.chem-val.tc { color: var(--teal); }
+.chem-val.vc { color: var(--violet); }
+.chem-val.sm { font-size: 14px; word-break: break-all; color: var(--text-secondary); }
+
+.phase-badge {
+  display: inline-block;
+  font-size: 15px;
+  font-weight: 700;
+  background: var(--teal-dim);
+  color: var(--teal);
+  border: 1px solid rgba(13,148,136,0.2);
+  border-radius: 99px;
+  padding: 3px 10px;
+}
+.phase-badge.fda {
+  background: var(--amber-dim);
+  color: var(--amber);
+  border-color: rgba(217,119,6,0.25);
+}
+
+.ro5-pass, .ro5-fail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+.ro5-pass { background: var(--teal-bg); color: var(--teal); border: 1px solid rgba(13,148,136,0.15); }
+.ro5-fail { background: var(--rose-bg); color: var(--rose); border: 1px solid rgba(225,29,72,0.15); }
+
+.chembl-notfound {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  text-align: center;
+  font-size: 17px;
+  color: var(--text-muted);
+}
+
+.bio-count {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--violet-dim);
+  color: var(--violet);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 99px;
+  padding: 2px 9px;
+}
+
+/* Similar controls */
+.sim-controls {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.sim-label { font-size: 17px; color: var(--text-secondary); font-weight: 500; }
+.sim-range {
+  -webkit-appearance: none;
+  height: 4px;
+  border-radius: 99px;
+  background: var(--border);
+  outline: none;
+  width: 130px;
+}
+.sim-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--teal);
+  cursor: pointer;
+  border: 2.5px solid white;
+  box-shadow: var(--shadow-sm);
+}
+.sim-val { font-family: 'JetBrains Mono', monospace; font-size: 17px; color: var(--teal); font-weight: 600; min-width: 36px; }
+
+/* ═══════════════════════════════════════════════
+   TABLES
+═══════════════════════════════════════════════ */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+table { width: 100%; border-collapse: collapse; }
+thead tr { background: var(--bg-raised); }
+th {
+  padding: 11px 16px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(15,23,42,0.04);
+  font-size: 18px;
+  color: var(--text-primary);
+  background: var(--bg-surface);
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--bg-raised); }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.badge.active { background: var(--teal-bg); color: var(--teal); border: 1px solid rgba(13,148,136,0.2); }
+.badge.inactive { background: var(--rose-bg); color: var(--rose); border: 1px solid rgba(225,29,72,0.15); }
+.badge.admin { background: var(--violet-bg); color: var(--violet); border: 1px solid rgba(99,102,241,0.2); }
+.badge.biologist { background: var(--teal-bg); color: var(--teal); border: 1px solid rgba(13,148,136,0.15); }
+
+.smiles-td {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+}
+
+/* ═══════════════════════════════════════════════
+   BATCH / DROP ZONE
+═══════════════════════════════════════════════ */
+.drop-zone {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: 52px 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s;
+  background: var(--bg-raised);
+}
+.drop-zone:hover, .drop-zone.over {
+  border-color: var(--teal);
+  background: var(--teal-bg);
+}
+.drop-icon { display: flex; justify-content: center; opacity: 0.25; margin-bottom: 14px; color: var(--text-secondary); }
+.drop-title { font-size: 20px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; }
+.drop-sub { font-size: 16px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.3px; }
+#csv-input { display: none; }
+
+.batch-summary { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin: 20px 0; }
+.bs-card {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  text-align: center;
+}
+.bs-val { font-size: 32px; font-weight: 800; color: var(--text-primary); }
+.bs-lbl { font-size: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-top: 4px; }
+
+/* ═══════════════════════════════════════════════
+   EMPTY STATE
+═══════════════════════════════════════════════ */
+.empty-state { text-align: center; padding: 52px 32px; }
+.empty-icon { display: flex; justify-content: center; margin-bottom: 12px; opacity: 0.2; }
+.empty-state p {
+  font-size: 17px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════════
+   ADMIN
+═══════════════════════════════════════════════ */
+.admin-stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; }
+.admin-stat {
+  background: var(--bg-surface);
+  border: 1px solid rgba(99,102,241,0.15);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition);
+}
+.admin-stat:hover { transform: translateY(-2px); }
+.admin-stat .sc-label { color: var(--violet); font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+.admin-stat .sc-val { font-size: 34px; font-weight: 800; color: var(--text-primary); }
+.admin-stat .sc-sub { color: var(--text-muted); margin-top: 5px; font-size: 16px; }
+
+.admin-alert {
+  background: var(--violet-bg);
+  border: 1px solid rgba(99,102,241,0.15);
+  border-radius: var(--radius-md);
+  padding: 13px 18px;
+  font-size: 17px;
+  color: var(--violet);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+.admin-alert-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--violet);
+  flex-shrink: 0;
+}
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+
+.progress-mini { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; margin-top: 7px; }
+.progress-mini-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--violet), var(--teal)); }
+
+.rate-ring { display: flex; align-items: center; gap: 24px; padding: 8px 0; }
+.ring-wrap { position: relative; width: 80px; height: 80px; flex-shrink: 0; }
+.ring-wrap svg { transform: rotate(-90deg); }
+.ring-text {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 800; color: var(--violet);
+}
+.rate-info h3 { font-size: 28px; font-weight: 800; color: var(--text-primary); }
+.rate-info p { font-size: 16px; color: var(--text-muted); margin-top: 5px; line-height: 1.6; }
+
+/* ═══════════════════════════════════════════════
+   LOADER
+═══════════════════════════════════════════════ */
+#loader {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(245,247,250,0.85);
+  z-index: 999;
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 16px;
+  backdrop-filter: blur(4px);
+}
+#loader.show { display: flex; }
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--teal);
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loader-text {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.3px;
+}
+
+/* ═══════════════════════════════════════════════
+   NOTIFICATION
+═══════════════════════════════════════════════ */
+.notif {
+  position: fixed; bottom: 28px; right: 28px;
+  background: var(--text-primary);
+  color: white;
+  border-radius: var(--radius-md);
+  padding: 14px 20px;
+  z-index: 999;
+  min-width: 260px;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  display: flex; align-items: center; gap: 12px;
+  pointer-events: none;
+}
+.notif.show { transform: translateY(0); opacity: 1; }
+.notif-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal-light); flex-shrink: 0; }
+.notif-text { font-size: 17px; font-weight: 500; }
+
+/* NOT FOUND BANNER */
+.not-found-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px 22px;
+  font-size: 17px;
+  color: var(--text-muted);
+  margin-top: 20px;
+}
+.not-found-icon { display: flex; align-items: center; opacity: 0.35; flex-shrink: 0; color: var(--text-muted); }
+
+/* Checkbox label */
+.check-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+.check-label input[type=checkbox] { accent-color: var(--violet); width: 15px; height: 15px; }
+
+/* Mono utilities */
+.mono-teal { font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--teal); font-weight: 600; }
+.mono-violet { font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--violet); font-weight: 600; }
+.mono-muted { font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--text-muted); }
+
+/* Info tag */
+.info-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  background: var(--teal-bg);
+  color: var(--teal);
+  border: 1px solid rgba(13,148,136,0.2);
+  padding: 4px 12px;
+  border-radius: 99px;
+}
+.info-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+</style>
+</head>
+<body>
+
+<div id="loader"><div class="spinner"></div><div class="loader-text" id="loader-text">İşleniyor...</div></div>
+<div class="notif" id="notif"><div class="notif-dot"></div><div class="notif-text" id="notif-text"></div></div>
+
+<!-- ════════════════════════════════════
+     LOGIN
+════════════════════════════════════ -->
+<div class="page active" id="page-login">
+  <div class="login-wrap">
+    <div class="login-brand">
+      <div class="logo-mark">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
+        </svg>
+      </div>
+      <span class="wordmark">ALZCHEM</span>
+      <div class="tagline">Alzheimer İlaç Analiz Platformu</div>
+    </div>
+    <div class="login-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchAuthTab('login',this)">Giriş Yap</button>
+        <button class="auth-tab" onclick="switchAuthTab('register',this)">Kayıt Ol</button>
+      </div>
+
+      <div id="form-login">
+        <div class="form-field">
+          <label class="form-label">E-posta adresi</label>
+          <input class="form-input" id="login-email" type="email" placeholder="biyolog@lab.com">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Şifre</label>
+          <input class="form-input" id="login-pw" type="password" placeholder="Şifrenizi girin" onkeydown="if(event.key==='Enter')doLogin()">
+        </div>
+        <button class="btn-primary" onclick="doLogin()">Giriş Yap</button>
+        <div class="auth-err" id="login-err"></div>
+      </div>
+
+      <div id="form-register" style="display:none">
+        <div class="form-field">
+          <label class="form-label">Ad Soyad</label>
+          <input class="form-input" id="reg-name" type="text" placeholder="Dr. Ayşe Kaya">
+        </div>
+        <div class="form-field">
+          <label class="form-label">E-posta adresi</label>
+          <input class="form-input" id="reg-email" type="email" placeholder="biyolog@lab.com">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Şifre</label>
+          <input class="form-input" id="reg-pw" type="password" placeholder="En az 6 karakter">
+        </div>
+        <button class="btn-primary" onclick="doRegister()">Hesap Oluştur</button>
+        <div class="auth-err" id="reg-err"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     APP
+════════════════════════════════════ -->
+<div class="page" id="page-app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-mark">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
+        </svg>
+      </div>
+      <div class="sb-logo-text">
+        <span class="wordmark">ALZCHEM</span>
+        <div class="sub">İlaç Analiz Platformu</div>
+      </div>
+    </div>
+
+    <div class="sb-section">Ana Menü</div>
+    <button class="nav-item active" onclick="showView('dashboard',this)">
+      <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span> Kontrol Paneli
+    </button>
+    <button class="nav-item" onclick="showView('single',this)">
+      <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><path d="m21 21-4.35-4.35"/><circle cx="11" cy="11" r="2.5"/></svg></span> Tek Molekül
+    </button>
+    <button class="nav-item" onclick="showView('batch',this)">
+      <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg></span> Toplu Analiz
+    </button>
+
+    <div class="sb-section">Keşif</div>
+    <button class="nav-item" onclick="showView('chembl-search',this)">
+      <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span> ChEMBL Arama
+    </button>
+    <button class="nav-item" onclick="showView('similar',this)">
+      <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></span> Benzer Moleküller
+    </button>
+
+    <div class="sb-section">Kayıtlar</div>
+    <button class="nav-item" onclick="showView('history',this)">
+      <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span> Geçmiş
+    </button>
+
+    <div class="sb-section admin-only" id="sb-admin-section">Yönetim</div>
+    <button class="nav-item admin-nav admin-only" id="nav-admin-users" onclick="showView('admin-users',this)">
+      <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span> Kullanıcılar <span class="admin-badge">ADMİN</span>
+    </button>
+    <button class="nav-item admin-nav admin-only" id="nav-admin-stats" onclick="showView('admin-stats',this)">
+      <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span> Sistem Stats <span class="admin-badge">ADMİN</span>
+    </button>
+
+    <div class="sb-bottom"></div>
+  </aside>
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="status-pill">
+      <div class="status-dot" id="status-dot"></div>
+      <span id="status-text">Çevrimdışı</span>
+    </div>
+    <div class="topbar-right">
+      <div class="user-pill">
+        <div class="user-avatar" id="tb-avatar">?</div>
+        <span class="user-name" id="tb-name">—</span>
+        <button class="btn-logout" onclick="doLogout()" title="Çıkış">⎋</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- ══ DASHBOARD ══ -->
+    <div class="view active" id="view-dashboard">
+      <div class="page-header">
+        <h2>Merhaba, <span class="hl" id="dash-name">—</span></h2>
+        <div class="desc">Alzheimer ilaç biyoaktivite analiz platformuna hoş geldiniz</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="sc-icon" style="background:var(--teal-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg></div>
+          <div class="sc-label">Toplam Analiz</div>
+          <div class="sc-val v1" id="st-total">—</div>
+          <div class="sc-sub">Tüm zamanlar</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-icon" style="background:var(--violet-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="sc-label">Aktif Molekül</div>
+          <div class="sc-val v2" id="st-active">—</div>
+          <div class="sc-sub">IC50 ≤ 1000 nM</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-icon" style="background:var(--rose-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+          <div class="sc-label">İnaktif Molekül</div>
+          <div class="sc-val v3" id="st-inactive">—</div>
+          <div class="sc-sub">IC50 ≥ 10000 nM</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-icon" style="background:var(--amber-dim)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg></div>
+          <div class="sc-label">ChEMBL Eşlenen</div>
+          <div class="sc-val v4" id="st-chembl">—</div>
+          <div class="sc-sub">Veritabanı kaydı</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Son Analizler <small>En yeni 5 kayıt</small></div>
+        </div>
+        <div id="dash-recent">
+          <div class="empty-state"><div class="empty-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><p>Henüz analiz yapılmadı</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TEK MOLEKÜL ══ -->
+    <div class="view" id="view-single">
+      <div class="page-header">
+        <h2>Tek Molekül <span class="hl">Analizi</span></h2>
+        <div class="desc">SMILES girin — ML tahmini ve ChEMBL zenginleştirme otomatik çalışır</div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Molekül SMILES Dizisi</div>
+          <span class="info-tag"><span class="info-dot"></span> Hazır</span>
+        </div>
+        <textarea class="smiles-input" id="smiles-input" placeholder="Buraya SMILES girin ya da aşağıdan bir örnek seçin..."></textarea>
+        <div class="chip-row">
+          <span class="chip-label">Örnekler:</span>
+          <span class="chip" onclick="setEx('donepezil')">Donepezil</span>
+          <span class="chip" onclick="setEx('galantamine')">Galantamine</span>
+          <span class="chip" onclick="setEx('memantine')">Memantine</span>
+          <span class="chip" onclick="setEx('paracetamol')">Paracetamol</span>
+          <span class="chip" onclick="setEx('memantinedif')">Diğer</span>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;margin-top:18px;flex-wrap:wrap;">
+          <button class="btn-teal" id="btn-single" onclick="doSingle()">▶ Analiz Et</button>
+          <label class="check-label">
+            <input type="checkbox" id="chk-enrich" checked>
+            ChEMBL ile zenginleştir
+          </label>
+        </div>
+        <div class="alert error" id="single-err"></div>
+      </div>
+
+      <!-- Tahmin Sonucu -->
+      <div class="result-box" id="result-box">
+        <div class="result-top" id="result-top">
+          <div class="verdict">
+            <div class="verdict-icon" id="res-icon">?</div>
+            <div class="verdict-text">
+              <div class="label" id="res-label">—</div>
+              <div class="sublabel">Alzheimer İlaç Aktivitesi Tahmini</div>
+            </div>
+          </div>
+          <div id="res-chembl-badge" style="display:none">
+            <span class="chembl-id-pill" id="res-chembl-id-top"></span>
+          </div>
+        </div>
+        <div class="prob-wrap">
+          <div class="prob-head"><span>İnaktif</span><span id="prob-pct">—</span><span>Aktif</span></div>
+          <div class="prob-track"><div class="prob-fill" id="prob-fill"></div></div>
+        </div>
+        <div class="result-metrics">
+          <div class="r-metric"><div class="val" id="m-prob">—</div><div class="lbl">Aktif Olasılığı</div></div>
+          <div class="r-metric"><div class="val" id="m-conf">—</div><div class="lbl">Güven Skoru</div></div>
+          <div class="r-metric"><div class="val" id="m-class">—</div><div class="lbl">Sınıf</div></div>
+        </div>
+      </div>
+
+      <!-- ChEMBL Paneli -->
+      <div class="chembl-panel" id="chembl-panel" style="display:none">
+        <div class="chembl-hdr">
+          <div class="chembl-dot"></div>
+          <div class="chembl-hdr-title">ChEMBL Molekül Bilgileri</div>
+          <span class="chembl-id-pill" id="chembl-id-badge">—</span>
+        </div>
+        <div class="chembl-body">
+          <div class="chembl-tabs">
+            <button class="ctab active" onclick="switchChemblTab('identity',this)">Kimlik</button>
+            <button class="ctab" onclick="switchChemblTab('physico',this)">Fizikokimya</button>
+            <button class="ctab" onclick="switchChemblTab('bioact',this)">Biyoaktivite</button>
+            <button class="ctab" onclick="switchChemblTab('similar',this)">Benzer Moleküller</button>
+          </div>
+
+          <div class="ctab-panel active" id="ctab-identity">
+            <div class="chem-grid">
+              <div class="chem-block">
+                <div class="chem-block-title">Temel Bilgiler</div>
+                <div class="chem-row"><span class="chem-key">ChEMBL ID</span><span class="chem-val vc" id="c-id">—</span></div>
+                <div class="chem-row"><span class="chem-key">İsim</span><span class="chem-val" id="c-name">—</span></div>
+                <div class="chem-row"><span class="chem-key">Tip</span><span class="chem-val" id="c-type">—</span></div>
+                <div class="chem-row"><span class="chem-key">Formül</span><span class="chem-val tc" id="c-formula">—</span></div>
+              </div>
+              <div class="chem-block">
+                <div class="chem-block-title">Onay Durumu</div>
+                <div class="chem-row"><span class="chem-key">Max Phase</span><span id="c-phase">—</span></div>
+                <div class="chem-row"><span class="chem-key">InChI Key</span><span class="chem-val sm" id="c-inchi">—</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ctab-panel" id="ctab-physico">
+            <div class="chem-grid">
+              <div class="chem-block">
+                <div class="chem-block-title">Molekül Özellikleri</div>
+                <div class="chem-row"><span class="chem-key">MW (g/mol)</span><span class="chem-val tc" id="c-mw">—</span></div>
+                <div class="chem-row"><span class="chem-key">ALogP</span><span class="chem-val" id="c-alogp">—</span></div>
+                <div class="chem-row"><span class="chem-key">TPSA (Å²)</span><span class="chem-val" id="c-tpsa">—</span></div>
+                <div class="chem-row"><span class="chem-key">Dönen Bağlar</span><span class="chem-val" id="c-rtb">—</span></div>
+              </div>
+              <div class="chem-block">
+                <div class="chem-block-title">Hidrojen Bağları</div>
+                <div class="chem-row"><span class="chem-key">H-Bağı Akseptör</span><span class="chem-val" id="c-hba">—</span></div>
+                <div class="chem-row"><span class="chem-key">H-Bağı Donor</span><span class="chem-val" id="c-hbd">—</span></div>
+                <div id="c-ro5-box"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ctab-panel" id="ctab-bioact">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+              <span style="font-size:17px;font-weight:600;color:var(--text-secondary)">ChEMBL Biyoaktivite Kayıtları</span>
+              <span class="bio-count" id="bio-count">0</span>
+            </div>
+            <div id="bio-table-wrap">
+              <div class="chembl-notfound">Biyoaktivite verisi yükleniyor...</div>
+            </div>
+          </div>
+
+          <div class="ctab-panel" id="ctab-similar">
+            <div class="sim-controls">
+              <span class="sim-label">Tanimoto Eşiği:</span>
+              <input type="range" class="sim-range" id="sim-threshold" min="40" max="100" value="70" oninput="document.getElementById('sim-val').textContent=this.value+'%'">
+              <span class="sim-val" id="sim-val">70%</span>
+              <button class="btn-ghost" id="btn-sim" onclick="loadSimilar()">Ara</button>
+            </div>
+            <div id="sim-table-wrap">
+              <div class="chembl-notfound">Eşiği ayarlayıp "Ara" butonuna basın.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="chembl-notfound" style="display:none;">
+        <div class="not-found-banner">
+          <span class="not-found-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg></span>
+          <span>Bu SMILES için ChEMBL veritabanında kayıt bulunamadı. Muhtemelen yeni veya deneysel bir bileşik.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TOPLU ANALİZ ══ -->
+    <div class="view" id="view-batch">
+      <div class="page-header">
+        <h2>Toplu <span class="hl">Analiz</span></h2>
+        <div class="desc">CSV dosyası yükleyin — <code style="background:var(--bg-raised);padding:2px 6px;border-radius:4px;font-size:16px;">canonical_smiles</code> sütunu olmalı — maks. 50.000 satır</div>
+      </div>
+      <div class="card">
+        <div class="drop-zone" id="drop-zone" onclick="document.getElementById('csv-input').click()" ondragover="dzOver(event)" ondrop="dzDrop(event)" ondragleave="dzLeave(event)">
+          <div class="drop-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+          <div class="drop-title">CSV dosyasını buraya sürükleyin</div>
+          <div class="drop-sub">ya da tıklayarak seçin · maksimum 50.000 satır</div>
+        </div>
+        <input type="file" id="csv-input" accept=".csv" onchange="loadCSV(event)">
+        <div id="csv-ready" style="display:none;margin-top:16px;">
+          <div class="alert success show" id="csv-info"></div>
+          <div style="display:flex;gap:14px;align-items:center;margin-top:14px;flex-wrap:wrap;">
+            <button class="btn-teal" onclick="doBatch()">▶ Toplu Analizi Başlat</button>
+            <label class="check-label">
+              <input type="checkbox" id="chk-batch-enrich">
+              ChEMBL ile zenginleştir <span style="color:var(--rose);font-size:15px;margin-left:4px;">(yavaşlatabilir)</span>
+            </label>
+          </div>
+        </div>
+        <div class="alert error" id="batch-err"></div>
+      </div>
+      <div id="batch-results" style="display:none">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Analiz Sonuçları</div>
+            <button class="btn-ghost" onclick="downloadBatch()">↓ CSV Olarak İndir</button>
+          </div>
+          <div class="batch-summary">
+            <div class="bs-card"><div class="bs-val" id="bs-total">—</div><div class="bs-lbl">Toplam</div></div>
+            <div class="bs-card"><div class="bs-val" id="bs-active" style="color:var(--teal)">—</div><div class="bs-lbl">Aktif</div></div>
+            <div class="bs-card"><div class="bs-val" id="bs-inactive" style="color:var(--rose)">—</div><div class="bs-lbl">İnaktif</div></div>
+            <div class="bs-card"><div class="bs-val" id="bs-error">—</div><div class="bs-lbl">Hata</div></div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>#</th><th>SMILES</th><th>ChEMBL</th><th>İsim</th><th>Tahmin</th><th>Aktif %</th><th>Güven</th></tr></thead>
+              <tbody id="batch-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ChEMBL ARAMA ══ -->
+    <div class="view" id="view-chembl-search">
+      <div class="page-header">
+        <h2>ChEMBL <span class="hl">Arama</span></h2>
+        <div class="desc">SMILES veya ChEMBL ID ile veritabanında doğrudan arama yapın</div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Arama Sorgusu</div></div>
+        <textarea class="smiles-input" id="chembl-search-input" style="min-height:60px;" placeholder="SMILES dizisi veya CHEMBL123456 girin..."></textarea>
+        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+          <button class="btn-teal" onclick="doChemblSearch()">▶ SMILES ile Ara</button>
+          <button class="btn-violet" onclick="doChemblById()">◈ ID ile Ara</button>
+        </div>
+        <div class="alert error" id="chembl-search-err"></div>
+      </div>
+      <div id="chembl-search-result"></div>
+    </div>
+
+    <!-- ══ BENZER MOLEKÜLLER ══ -->
+    <div class="view" id="view-similar">
+      <div class="page-header">
+        <h2>Benzer <span class="hl">Moleküller</span></h2>
+        <div class="desc">Tanimoto benzerliğine göre ChEMBL'de arama yapın ve her biri için tahmin çalıştırın</div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Referans Molekül SMILES</div></div>
+        <textarea class="smiles-input" id="sim-smiles-input" placeholder="Referans molekülün SMILES dizisini girin..."></textarea>
+        <div class="chip-row">
+          <span class="chip-label">Örnekler:</span>
+          <span class="chip" onclick="document.getElementById('sim-smiles-input').value=EX.donepezil">Donepezil</span>
+          <span class="chip" onclick="document.getElementById('sim-smiles-input').value=EX.galantamine">Galantamine</span>
+        </div>
+        <div style="display:flex;gap:18px;align-items:center;margin-top:16px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="sim-label">Eşik:</span>
+            <input type="range" class="sim-range" id="sim-page-threshold" min="40" max="100" value="70" oninput="document.getElementById('sim-page-val').textContent=this.value+'%'">
+            <span class="sim-val" id="sim-page-val">70%</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="sim-label">Limit:</span>
+            <select id="sim-limit" style="background:var(--bg-raised);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;padding:7px 12px;outline:none;cursor:pointer;font-weight:500;">
+              <option value="5">5 sonuç</option>
+              <option value="10" selected>10 sonuç</option>
+              <option value="20">20 sonuç</option>
+              <option value="30">30 sonuç</option>
+            </select>
+          </div>
+          <button class="btn-teal" onclick="doPageSimilar()">▶ Benzerleri Bul ve Tahmin Et</button>
+        </div>
+        <div class="alert error" id="sim-page-err"></div>
+      </div>
+      <div id="sim-page-results"></div>
+    </div>
+
+    <!-- ══ GEÇMİŞ ══ -->
+    <div class="view" id="view-history">
+      <div class="page-header">
+        <h2>Analiz <span class="hl">Geçmişi</span></h2>
+        <div class="desc">Tüm tahmin kayıtlarınız — ChEMBL eşleşme bilgisiyle birlikte</div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Tekil Tahminler</div></div>
+        <div id="history-content">
+          <div class="empty-state"><div class="empty-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><p>Yükleniyor...</p></div>
+    <div class="view" id="view-admin-users">
+      <div class="page-header">
+        <h2>Kullanıcı <span class="hl2">Yönetimi</span></h2>
+        <div class="desc">Sistemdeki tüm kullanıcılar — Yalnızca yöneticiler görüntüleyebilir</div>
+      </div>
+      <div class="admin-alert"><div class="admin-alert-dot"></div><span>/admin/users uç noktasından çekilmektedir.</span></div>
+      <div class="admin-stats-grid">
+        <div class="admin-stat"><div class="sc-label">Toplam Kullanıcı</div><div class="sc-val" id="au-total">—</div><div class="sc-sub">Kayıtlı hesap</div></div>
+        <div class="admin-stat"><div class="sc-label">Biyolog</div><div class="sc-val" id="au-biologist">—</div><div class="sc-sub">Standart rol</div></div>
+        <div class="admin-stat"><div class="sc-label">Yönetici</div><div class="sc-val" id="au-admin">—</div><div class="sc-sub">Admin rol</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Kullanıcı Listesi <small id="au-count-label"></small></div>
+          <button class="btn-ghost" onclick="loadAdminUsers()">↻ Yenile</button>
+        </div>
+        <div id="admin-users-content">
+          <div class="empty-state"><div class="empty-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><p>Yükleniyor...</p></div>
+    <div class="view" id="view-admin-stats">
+      <div class="page-header">
+        <h2>Sistem <span class="hl2">İstatistikleri</span></h2>
+        <div class="desc">Platform geneli analiz metrikleri — Yalnızca yöneticiler görüntüleyebilir</div>
+      </div>
+      <div class="admin-alert"><div class="admin-alert-dot"></div><span>/admin/stats uç noktasından anlık olarak çekilmektedir.</span></div>
+      <div class="admin-stats-grid">
+        <div class="admin-stat"><div class="sc-label">Toplam Kullanıcı</div><div class="sc-val" id="as-users">—</div><div class="sc-sub">Kayıtlı hesap</div></div>
+        <div class="admin-stat"><div class="sc-label">Toplam Tahmin</div><div class="sc-val" id="as-preds">—</div><div class="sc-sub">Tüm zamanlar</div></div>
+        <div class="admin-stat"><div class="sc-label">ChEMBL Eşlenen</div><div class="sc-val" id="as-chembl">—</div><div class="sc-sub">Veritabanı eşleşmesi</div></div>
+      </div>
+      <div class="two-col">
+        <div class="card" style="margin-bottom:0">
+          <div class="card-header"><div class="card-title">Tahmin Dağılımı</div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div class="r-metric"><div class="val" id="as-active" style="color:var(--teal)">—</div><div class="lbl">Aktif</div></div>
+            <div class="r-metric"><div class="val" id="as-inactive" style="color:var(--rose)">—</div><div class="lbl">İnaktif</div></div>
+          </div>
+          <div style="margin-top:18px;">
+            <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:10px;">Aktif / İnaktif Oranı</div>
+            <div style="display:flex;height:8px;border-radius:99px;overflow:hidden;gap:2px;">
+              <div id="bar-active" style="background:var(--teal);height:100%;border-radius:99px;transition:width .8s;width:50%;"></div>
+              <div id="bar-inactive" style="background:var(--rose);height:100%;border-radius:99px;transition:width .8s;width:50%;opacity:0.7;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:8px;">
+              <span style="font-size:15px;font-weight:600;color:var(--teal);" id="bar-active-lbl">—</span>
+              <span style="font-size:15px;font-weight:600;color:var(--rose);" id="bar-inactive-lbl">—</span>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:0">
+          <div class="card-header"><div class="card-title">Aktif Molekül Oranı</div></div>
+          <div class="rate-ring">
+            <div class="ring-wrap">
+              <svg width="80" height="80" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--border)" stroke-width="8"/>
+                <circle cx="40" cy="40" r="32" fill="none" stroke="url(#rgrad)" stroke-width="8"
+                  stroke-dasharray="201" id="rate-circle" stroke-dashoffset="201" stroke-linecap="round"
+                  style="transition:stroke-dashoffset 1s cubic-bezier(.4,0,.2,1)"/>
+                <defs><linearGradient id="rgrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#0d9488"/>
+                </linearGradient></defs>
+              </svg>
+              <div class="ring-text" id="rate-ring-text">—</div>
+            </div>
+            <div class="rate-info">
+              <h3 id="rate-pct-big">—%</h3>
+              <p>Aktif olarak sınıflandırılan<br>toplam molekül oranı</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:20px;">
+        <div class="card-header">
+          <div class="card-title">Tüm İstatistikler</div>
+          <button class="btn-ghost" onclick="loadAdminStats()">↻ Yenile</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Metrik</th><th>Değer</th><th>Açıklama</th></tr></thead>
+            <tbody id="admin-stats-tbody">
+              <tr><td colspan="3" style="text-align:center;color:var(--text-muted);">Yükleniyor...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ─── CONFIG ────────────────────────────────────────
+const API = 'http://localhost:8000';
+const EX = {
+  donepezil:    'COc1cc2c(cc1OC)C(=O)C(CC1CCN(Cc3ccccc3)CC1)C2',
+  galantamine:  'COc1ccc2c3c1O[C@H]1C[C@@H](O)C=C[C@@]31CCN(C)C2',
+  memantine:    'CC12CC3CC(C)(C1)CC(N)(C3)C2',
+  paracetamol:  'CC(=O)NC1=CC=C(O)C=C1',
+  memantinedif: 'CC12CC(CC(C1)(CC2N)C)C'
+};
+
+let TOKEN = localStorage.getItem('nd_token');
+let USER  = JSON.parse(localStorage.getItem('nd_user') || 'null');
+let csvRows = [], batchData = [], currentSmiles = '';
+
+if (TOKEN && USER) showApp();
+
+// ─── AUTH ──────────────────────────────────────────
+function switchAuthTab(tab, btn) {
+  document.querySelectorAll('.auth-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('form-login').style.display    = tab === 'login' ? '' : 'none';
+  document.getElementById('form-register').style.display = tab === 'register' ? '' : 'none';
+}
+
+async function doLogin() {
+  const e = document.getElementById('login-email').value.trim();
+  const p = document.getElementById('login-pw').value;
+  hideErr('login-err');
+  if (!e || !p) { showErr('login-err', 'E-posta ve şifre giriniz'); return; }
+  loader(true, 'Giriş yapılıyor...');
+  try {
+    const res = await fetch(`${API}/auth/login`, { method: 'POST', body: new URLSearchParams({ username: e, password: p }) });
+    const d = await res.json();
+    if (!res.ok) throw new Error(d.detail || 'Giriş başarısız');
+    TOKEN = d.access_token;
+    USER  = { name: d.user_name, role: d.role, email: e };
+    localStorage.setItem('nd_token', TOKEN);
+    localStorage.setItem('nd_user', JSON.stringify(USER));
+    showApp();
+  } catch(err) { showErr('login-err', err.message); }
+  finally { loader(false); }
+}
+
+async function doRegister() {
+  const n = document.getElementById('reg-name').value.trim();
+  const e = document.getElementById('reg-email').value.trim();
+  const p = document.getElementById('reg-pw').value;
+  hideErr('reg-err');
+  if (!n || !e || !p) { showErr('reg-err', 'Tüm alanları doldurunuz'); return; }
+  if (p.length < 6)   { showErr('reg-err', 'Şifre en az 6 karakter olmalı'); return; }
+  loader(true, 'Hesap oluşturuluyor...');
+  try {
+    const res = await fetch(`${API}/auth/register`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: e, full_name: n, password: p }) });
+    const d = await res.json();
+    if (!res.ok) throw new Error(d.detail || 'Kayıt başarısız');
+    document.getElementById('login-email').value = e;
+    document.getElementById('login-pw').value    = p;
+    switchAuthTab('login', document.querySelector('.auth-tab'));
+    await doLogin();
+  } catch(err) { showErr('reg-err', err.message); }
+  finally { loader(false); }
+}
+
+function doLogout() {
+  localStorage.removeItem('nd_token');
+  localStorage.removeItem('nd_user');
+  TOKEN = null; USER = null;
+  showPage('page-login');
+}
+
+function showApp() {
+  document.getElementById('tb-avatar').textContent = USER.name[0].toUpperCase();
+  document.getElementById('tb-name').textContent   = USER.name;
+  document.getElementById('dash-name').textContent  = USER.name.split(' ')[0];
+  document.getElementById('status-dot').className   = 'status-dot online';
+  document.getElementById('status-text').textContent = 'Bağlı';
+  if (USER.role === 'admin')
+    document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
+  showPage('page-app');
+  loadDashboard();
+  notify('Hoş geldin, ' + USER.name.split(' ')[0] + ' ');
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showView(name, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'history')     loadHistory();
+  if (name === 'dashboard')   loadDashboard();
+  if (name === 'admin-users') loadAdminUsers();
+  if (name === 'admin-stats') loadAdminStats();
+}
+
+// ─── DASHBOARD ─────────────────────────────────────
+async function loadDashboard() {
+  try {
+    const [hR, bR] = await Promise.all([apiFetch('/history/predictions?limit=500'), apiFetch('/history/batches')]);
+    const pr = await hR.json();
+    document.getElementById('st-total').textContent    = pr.length;
+    document.getElementById('st-active').textContent   = pr.filter(p => p.prediction === 'active').length;
+    document.getElementById('st-inactive').textContent = pr.filter(p => p.prediction === 'inactive').length;
+    document.getElementById('st-chembl').textContent   = pr.filter(p => p.chembl_id).length;
+    const el = document.getElementById('dash-recent'), rc = pr.slice(0, 5);
+    el.innerHTML = rc.length ? `<div class="table-wrap"><table><thead><tr>
+      <th>#</th><th>SMILES</th><th>ChEMBL ID</th><th>Tahmin</th><th>Güven</th><th>Tarih</th></tr></thead><tbody>
+      ${rc.map((p, i) => `<tr>
+        <td style="color:var(--text-muted);font-weight:600">${i+1}</td>
+        <td class="smiles-td" title="${p.smiles}">${p.smiles}</td>
+        <td class="mono-violet">${p.chembl_id || '—'}</td>
+        <td><span class="badge ${p.prediction}">${p.prediction === 'active' ? '✓ Aktif' : '✗ İnaktif'}</span></td>
+        <td class="mono-muted">${p.confidence.toFixed(1)}%</td>
+        <td style="color:var(--text-muted);font-size:16px">${fmtDate(p.created_at)}</td>
+      </tr>`).join('')}</tbody></table></div>`
+    : `<div class="empty-state"><div class="empty-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg></div><p>Henüz analiz yapılmadı</p></div>`;
+  } catch(e) { console.warn(e); }
+}
+
+// ─── TEK MOLEKÜL ──────────────────────────────────
+function setEx(n) { document.getElementById('smiles-input').value = EX[n]; }
+
+async function doSingle() {
+  const s = document.getElementById('smiles-input').value.trim();
+  const enrich = document.getElementById('chk-enrich').checked;
+  hideErr('single-err');
+  if (!s) { showErr('single-err', 'Lütfen bir SMILES dizisi girin'); return; }
+  document.getElementById('btn-single').disabled = true;
+  loader(true, enrich ? 'ML tahmini + ChEMBL sorgulanıyor...' : 'Tahmin yapılıyor...');
+  currentSmiles = s;
+  document.getElementById('chembl-panel').style.display    = 'none';
+  document.getElementById('chembl-notfound').style.display = 'none';
+  try {
+    const endpoint = enrich ? '/chembl/predict-and-enrich' : '/predict';
+    const res = await apiFetch(endpoint, 'POST', { smiles: s });
+    const d   = await res.json();
+    if (!res.ok) throw new Error(d.detail || d.error || 'Bir hata oluştu');
+    if (enrich) {
+      renderResult(d.ml, d.chembl ? d.chembl.chembl_id : null, d.chembl ? d.chembl.name : null);
+      if (d.chembl) renderChemblPanel(d.chembl, d.bioactivities);
+      else document.getElementById('chembl-notfound').style.display = '';
+    } else {
+      renderResult(d, d.chembl_id, d.chembl_name);
+      if (d.chembl_id) {
+        loader(true, 'ChEMBL verisi alınıyor...');
+        const cr = await apiFetch(`/chembl/molecule?smiles=${encodeURIComponent(s)}`);
+        const cd = await cr.json();
+        if (cd.found) renderChemblPanel(cd, []);
+        else document.getElementById('chembl-notfound').style.display = '';
+      }
+    }
+    notify('Analiz tamamlandı ');
+  } catch(e) { showErr('single-err', e.message); }
+  finally { document.getElementById('btn-single').disabled = false; loader(false); }
+}
+
+function renderResult(d, chemblId, chemblName) {
+  const ia = d.prediction === 'active';
+  document.getElementById('result-box').classList.add('show');
+  document.getElementById('result-top').className = 'result-top ' + d.prediction;
+  const ic = document.getElementById('res-icon');
+  ic.className = 'verdict-icon ' + d.prediction;
+  ic.textContent = ia ? '' : '';
+  const lb = document.getElementById('res-label');
+  lb.className = 'label ' + d.prediction;
+  lb.textContent = ia ? 'AKTİF' : 'İNAKTİF';
+  const pct = (d.prob_active * 100).toFixed(1);
+  document.getElementById('prob-pct').textContent = pct + '%';
+  const f = document.getElementById('prob-fill');
+  f.className = 'prob-fill ' + d.prediction;
+  setTimeout(() => { f.style.width = pct + '%'; }, 50);
+  document.getElementById('m-prob').textContent  = pct + '%';
+  document.getElementById('m-conf').textContent  = d.confidence.toFixed(1) + '%';
+  document.getElementById('m-class').textContent = ia ? 'AKTİF' : 'İNAK.';
+  if (chemblId) {
+    document.getElementById('res-chembl-badge').style.display = '';
+    document.getElementById('res-chembl-id-top').textContent  = chemblId + (chemblName ? ' · ' + chemblName : '');
+  }
+}
+
+function renderChemblPanel(data, bioacts) {
+  document.getElementById('chembl-panel').style.display  = '';
+  document.getElementById('chembl-id-badge').textContent = data.chembl_id || '—';
+  document.getElementById('c-id').textContent      = data.chembl_id || '—';
+  document.getElementById('c-name').textContent    = data.name || '—';
+  document.getElementById('c-type').textContent    = data.molecule_type || data.type || '—';
+  document.getElementById('c-formula').textContent = data.formula || '—';
+  document.getElementById('c-inchi').textContent   = data.inchi_key || '—';
+  const ph = parseInt(data.max_phase) || 0;
+  document.getElementById('c-phase').innerHTML = `<span class="phase-badge${ph === 4 ? ' fda' : ''}">Phase ${ph}${ph === 4 ? ' (FDA)' : ''}</span>`;
+  document.getElementById('c-mw').textContent   = data.mw || '—';
+  document.getElementById('c-alogp').textContent = data.alogp || '—';
+  document.getElementById('c-tpsa').textContent  = data.tpsa || '—';
+  document.getElementById('c-rtb').textContent   = data.rotatable_bonds || '—';
+  document.getElementById('c-hba').textContent   = data.hba || '—';
+  document.getElementById('c-hbd').textContent   = data.hbd || '—';
+  const ro5 = document.getElementById('c-ro5-box');
+  if      (data.ro5_pass === true)  ro5.innerHTML = '<div class="ro5-pass"> Lipinski Ro5 Kurallarını Geçiyor</div>';
+  else if (data.ro5_pass === false) ro5.innerHTML = `<div class="ro5-fail"> Ro5 İhlali: ${data.ro5_violations} kural</div>`;
+  else ro5.innerHTML = '';
+  renderBioTable(bioacts || []);
+  document.getElementById('sim-table-wrap').innerHTML = '<div class="chembl-notfound">Eşiği ayarlayıp "Ara" butonuna basın.</div>';
+}
+
+function renderBioTable(acts) {
+  document.getElementById('bio-count').textContent = acts.length;
+  if (!acts.length) {
+    document.getElementById('bio-table-wrap').innerHTML = '<div class="chembl-notfound">Biyoaktivite verisi bulunamadı.</div>';
+    return;
+  }
+  document.getElementById('bio-table-wrap').innerHTML = `
+    <div class="table-wrap"><table>
+      <thead><tr><th>Hedef</th><th>Tip</th><th>Değer</th><th>Birim</th><th>pChEMBL</th></tr></thead>
+      <tbody>${acts.map(a => `<tr>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${a.target_pref_name || ''}">${a.target_pref_name || '—'}</td>
+        <td><span style="font-size:14px;font-weight:700;background:var(--teal-bg);color:var(--teal);border:1px solid rgba(13,148,136,0.2);border-radius:4px;padding:2px 8px;">${a.standard_type || '—'}</span></td>
+        <td class="mono-teal">${a.standard_value || '—'}</td>
+        <td class="mono-muted">${a.standard_units || '—'}</td>
+        <td class="mono-violet">${a.pchembl_value || '—'}</td>
+      </tr>`).join('')}</tbody></table></div>`;
+}
+
+function switchChemblTab(name, btn) {
+  document.querySelectorAll('.ctab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.ctab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('ctab-' + name).classList.add('active');
+}
+
+async function loadSimilar() {
+  const threshold = parseInt(document.getElementById('sim-threshold').value);
+  if (!currentSmiles) {
+    document.getElementById('sim-table-wrap').innerHTML = '<div class="chembl-notfound">Önce bir molekül analiz edin.</div>';
+    return;
+  }
+  document.getElementById('btn-sim').disabled = true;
+  document.getElementById('sim-table-wrap').innerHTML = '<div class="chembl-notfound">Aranıyor...</div>';
+  try {
+    const res = await apiFetch(`/chembl/similar?smiles=${encodeURIComponent(currentSmiles)}&threshold=${threshold}&limit=10`);
+    const d   = await res.json();
+    renderSimTable(d.molecules || [], 'sim-table-wrap');
+  } catch(e) {
+    document.getElementById('sim-table-wrap').innerHTML = `<div class="chembl-notfound" style="color:var(--rose)">⚠ ${e.message}</div>`;
+  } finally { document.getElementById('btn-sim').disabled = false; }
+}
+
+function renderSimTable(mols, targetId) {
+  if (!mols.length) {
+    document.getElementById(targetId).innerHTML = '<div class="chembl-notfound">Bu eşikte benzer molekül bulunamadı.</div>';
+    return;
+  }
+  document.getElementById(targetId).innerHTML = `
+    <div class="table-wrap"><table>
+      <thead><tr><th>#</th><th>ChEMBL ID</th><th>İsim</th><th>Benzerlik</th><th>MW</th><th>ALogP</th><th>Phase</th><th>SMILES</th></tr></thead>
+      <tbody>${mols.map((m, i) => `<tr>
+        <td style="color:var(--text-muted);font-weight:600">${i+1}</td>
+        <td class="mono-violet">${m.chembl_id || '—'}</td>
+        <td style="font-weight:500">${m.name || '—'}</td>
+        <td class="mono-teal">${m.similarity ? parseFloat(m.similarity).toFixed(1) + '%' : '—'}</td>
+        <td class="mono-muted">${m.mw || '—'}</td>
+        <td class="mono-muted">${m.alogp || '—'}</td>
+        <td class="mono-muted">${m.max_phase ?? '—'}</td>
+        <td class="smiles-td" title="${m.smiles || ''}">${m.smiles || '—'}</td>
+      </tr>`).join('')}</tbody></table></div>`;
+}
+
+// ─── ChEMBL ARAMA ─────────────────────────────────
+async function doChemblSearch() {
+  const s = document.getElementById('chembl-search-input').value.trim();
+  hideErr('chembl-search-err');
+  if (!s) { showErr('chembl-search-err', 'Lütfen bir SMILES dizisi girin'); return; }
+  loader(true, 'ChEMBL sorgulanıyor...');
+  try {
+    const res = await apiFetch(`/chembl/molecule?smiles=${encodeURIComponent(s)}`);
+    const d   = await res.json();
+    if (!d.found) {
+      document.getElementById('chembl-search-result').innerHTML = '<div class="card"><div class="chembl-notfound">Bu SMILES için ChEMBL kaydı bulunamadı.</div></div>';
+      return;
+    }
+    renderChemblSearchResult(d);
+  } catch(e) { showErr('chembl-search-err', e.message); }
+  finally { loader(false); }
+}
+
+async function doChemblById() {
+  const id = document.getElementById('chembl-search-input').value.trim().toUpperCase();
+  hideErr('chembl-search-err');
+  if (!id.startsWith('CHEMBL')) { showErr('chembl-search-err', 'CHEMBL ile başlayan bir ID giriniz'); return; }
+  loader(true, 'ChEMBL ID sorgulanıyor...');
+  try {
+    const res = await apiFetch(`/chembl/molecule/${id}`);
+    if (!res.ok) throw new Error('Bulunamadı: ' + id);
+    const d = await res.json();
+    renderChemblSearchResult(d);
+  } catch(e) { showErr('chembl-search-err', e.message); }
+  finally { loader(false); }
+}
+
+function renderChemblSearchResult(d) {
+  const ro5 = d.ro5_pass === true  ? '<div class="ro5-pass"> Lipinski Ro5 Kurallarını Geçiyor</div>'
+            : d.ro5_pass === false ? '<div class="ro5-fail"> Ro5 İhlali</div>' : '';
+  let bioHtml = '<div class="chembl-notfound">Biyoaktivite verisi bulunamadı.</div>';
+  if (d.bioactivities && d.bioactivities.length) {
+    bioHtml = `<div class="table-wrap"><table>
+      <thead><tr><th>Hedef</th><th>Tip</th><th>Değer</th><th>Birim</th><th>pChEMBL</th></tr></thead>
+      <tbody>${d.bioactivities.map(a => `<tr>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.target_pref_name || '—'}</td>
+        <td><span style="font-size:14px;font-weight:700;background:var(--teal-bg);color:var(--teal);border:1px solid rgba(13,148,136,0.2);border-radius:4px;padding:2px 8px;">${a.standard_type || '—'}</span></td>
+        <td class="mono-teal">${a.standard_value || '—'}</td>
+        <td class="mono-muted">${a.standard_units || '—'}</td>
+        <td class="mono-violet">${a.pchembl_value || '—'}</td>
+      </tr>`).join('')}</tbody></table></div>`;
+  }
+  document.getElementById('chembl-search-result').innerHTML = `
+    <div class="chembl-panel" style="display:block;margin-top:20px;">
+      <div class="chembl-hdr">
+        <div class="chembl-dot"></div>
+        <div class="chembl-hdr-title">${d.name || '—'}</div>
+        <span class="chembl-id-pill">${d.chembl_id || '—'}</span>
+      </div>
+      <div class="chembl-body">
+        <div class="chem-grid">
+          <div class="chem-block">
+            <div class="chem-block-title">Kimlik Bilgileri</div>
+            <div class="chem-row"><span class="chem-key">Formül</span><span class="chem-val tc">${d.formula || '—'}</span></div>
+            <div class="chem-row"><span class="chem-key">Max Phase</span><span class="chem-val">${d.max_phase ?? '—'}</span></div>
+            <div class="chem-row"><span class="chem-key">Tip</span><span class="chem-val">${d.molecule_type || '—'}</span></div>
+            <div class="chem-row"><span class="chem-key">InChI Key</span><span class="chem-val sm">${d.inchi_key || '—'}</span></div>
+          </div>
+          <div class="chem-block">
+            <div class="chem-block-title">Fizikokimyasal Özellikler</div>
+            <div class="chem-row"><span class="chem-key">MW (g/mol)</span><span class="chem-val tc">${d.mw || '—'}</span></div>
+            <div class="chem-row"><span class="chem-key">ALogP</span><span class="chem-val">${d.alogp || '—'}</span></div>
+            <div class="chem-row"><span class="chem-key">HBA / HBD</span><span class="chem-val">${d.hba || '—'} / ${d.hbd || '—'}</span></div>
+            <div class="chem-row"><span class="chem-key">TPSA</span><span class="chem-val">${d.tpsa || '—'}</span></div>
+            ${ro5}
+          </div>
+        </div>
+        <div style="margin-top:16px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:17px;font-weight:600;color:var(--text-secondary);">Biyoaktivite Verileri</span>
+            <span class="bio-count">${(d.bioactivities || []).length}</span>
+          </div>
+          ${bioHtml}
+        </div>
+      </div>
+    </div>`;
+}
+
+// ─── BENZER MOLEKÜLLER ────────────────────────────
+async function doPageSimilar() {
+  const s   = document.getElementById('sim-smiles-input').value.trim();
+  const thr = document.getElementById('sim-page-threshold').value;
+  const lim = document.getElementById('sim-limit').value;
+  hideErr('sim-page-err');
+  if (!s) { showErr('sim-page-err', 'Lütfen bir SMILES dizisi girin'); return; }
+  loader(true, 'ChEMBL benzerlik araması + ML tahminleri...');
+  try {
+    const simRes  = await apiFetch(`/chembl/similar?smiles=${encodeURIComponent(s)}&threshold=${thr}&limit=${lim}`);
+    const simData = await simRes.json();
+    const mols    = simData.molecules || [];
+    if (!mols.length) {
+      document.getElementById('sim-page-results').innerHTML = '<div class="card"><div class="chembl-notfound">Bu eşikte benzer molekül bulunamadı.</div></div>';
+      return;
+    }
+    const predictions = await Promise.allSettled(
+      mols.map(m => m.smiles ? apiFetch('/predict', 'POST', { smiles: m.smiles }).then(r => r.json()) : Promise.resolve(null))
+    );
+    const rows = mols.map((m, i) => {
+      const pr   = predictions[i].status === 'fulfilled' ? predictions[i].value : null;
+      const pred = pr?.prediction || '—';
+      const prob = pr?.prob_active != null ? (pr.prob_active * 100).toFixed(1) + '%' : '—';
+      const conf = pr?.confidence  != null ? pr.confidence.toFixed(1) + '%' : '—';
+      return `<tr>
+        <td style="color:var(--text-muted);font-weight:600">${i+1}</td>
+        <td class="mono-violet">${m.chembl_id || '—'}</td>
+        <td style="font-weight:500">${m.name || '—'}</td>
+        <td class="mono-teal">${m.similarity ? parseFloat(m.similarity).toFixed(1) + '%' : '—'}</td>
+        <td class="mono-muted">${m.mw || '—'}</td>
+        <td class="mono-muted">${m.max_phase ?? '—'}</td>
+        <td>${pr ? `<span class="badge ${pred}">${pred === 'active' ? '✓ Aktif' : '✗ İnaktif'}</span>` : '<span style="color:var(--text-muted)">—</span>'}</td>
+        <td class="mono-teal">${prob}</td>
+        <td class="mono-muted">${conf}</td>
+      </tr>`;
+    }).join('');
+    document.getElementById('sim-page-results').innerHTML = `
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Benzer Moleküller <small>${mols.length} sonuç · Tanimoto ≥ ${thr}%</small></div>
+        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>#</th><th>ChEMBL ID</th><th>İsim</th><th>Benzerlik</th><th>MW</th><th>Phase</th><th>ML Tahmin</th><th>Aktif %</th><th>Güven</th></tr></thead>
+          <tbody>${rows}</tbody></table></div>
+      </div>`;
+    notify(`${mols.length} benzer molekül bulundu ve tahmin edildi`);
+  } catch(e) { showErr('sim-page-err', e.message); }
+  finally { loader(false); }
+}
+
+// ─── TOPLU ANALİZ ─────────────────────────────────
+function dzOver(e)  { e.preventDefault(); document.getElementById('drop-zone').classList.add('over'); }
+function dzLeave()  { document.getElementById('drop-zone').classList.remove('over'); }
+function dzDrop(e)  { e.preventDefault(); dzLeave(); const f = e.dataTransfer.files[0]; if (f) processCSV(f); }
+function loadCSV(e) { const f = e.target.files[0]; if (f) processCSV(f); }
+
+function processCSV(file) {
+  const r = new FileReader();
+  r.onload = e => {
+    const lines = e.target.result.split('\n').filter(l => l.trim());
+    const hdr   = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+    const si    = hdr.findIndex(h => h.toLowerCase().includes('smiles') || h.toLowerCase().includes('canonical'));
+    if (si === -1) { showErr('batch-err', `"smiles" sütunu bulunamadı. Sütunlar: ${hdr.join(', ')}`); return; }
+    csvRows = [];
+    for (let i = 1; i < lines.length; i++) {
+      const c = lines[i].split(','), s = c[si]?.trim().replace(/"/g, '');
+      if (s) csvRows.push(s);
+    }
+    document.getElementById('csv-info').textContent = ` ${file.name} — ${csvRows.length} molekül başarıyla yüklendi`;
+    document.getElementById('csv-ready').style.display    = '';
+    document.getElementById('batch-results').style.display = 'none';
+    hideErr('batch-err');
+  };
+  r.readAsText(file);
+}
+
+async function doBatch() {
+  if (!csvRows.length) return;
+  const enrich = document.getElementById('chk-batch-enrich').checked;
+  loader(true, 'Toplu analiz çalışıyor...');
+  try {
+    const fd = new FormData();
+    fd.append('file', new Blob([['canonical_smiles', ...csvRows].join('\n')], { type: 'text/csv' }), 'upload.csv');
+    const res = await fetch(`${API}/predict/batch?enrich=${enrich}`, { method: 'POST', headers: { 'Authorization': 'Bearer ' + TOKEN }, body: fd });
+    const d   = await res.json();
+    if (!res.ok) throw new Error(d.detail || 'Bir hata oluştu');
+    batchData = d.results;
+    renderBatch(d);
+    notify(`Toplu analiz tamamlandı · ${d.active} aktif / ${d.inactive} inaktif`);
+  } catch(e) { showErr('batch-err', e.message); }
+  finally { loader(false); }
+}
+
+function renderBatch(d) {
+  document.getElementById('bs-total').textContent   = d.total;
+  document.getElementById('bs-active').textContent  = d.active;
+  document.getElementById('bs-inactive').textContent = d.inactive;
+  document.getElementById('bs-error').textContent   = d.errors;
+  document.getElementById('batch-tbody').innerHTML  = d.results.slice(0, 200).map((r, i) => `<tr>
+    <td style="color:var(--text-muted);font-weight:600">${i+1}</td>
+    <td class="smiles-td" title="${r.smiles}">${r.smiles}</td>
+    <td class="mono-violet">${r.chembl_id || '—'}</td>
+    <td style="font-size:16px;color:var(--text-muted)">${r.chembl_name || '—'}</td>
+    <td>${r.error ? '<span style="color:var(--text-muted);font-size:16px;font-weight:600">HATA</span>' : `<span class="badge ${r.prediction}">${r.prediction === 'active' ? '✓ Aktif' : '✗ İnaktif'}</span>`}</td>
+    <td class="mono-teal">${r.prob_active != null ? (r.prob_active * 100).toFixed(1) + '%' : '—'}</td>
+    <td class="mono-muted">${r.confidence != null ? r.confidence.toFixed(1) + '%' : '—'}</td>
+  </tr>`).join('');
+  document.getElementById('batch-results').style.display = '';
+}
+
+function downloadBatch() {
+  if (!batchData.length) return;
+  const rows = [['smiles','chembl_id','chembl_name','prediction','prob_active','prob_inactive','confidence']];
+  batchData.forEach(r => rows.push([r.smiles, r.chembl_id||'', r.chembl_name||'', r.prediction||'error', r.prob_active?.toFixed(4)||'', r.prob_inactive?.toFixed(4)||'', r.confidence?.toFixed(2)||'']));
+  const a = document.createElement('a');
+  a.href     = URL.createObjectURL(new Blob([rows.map(r => r.join(',')).join('\n')], { type: 'text/csv' }));
+  a.download = 'alzheimer_tahminler_chembl.csv';
+  a.click();
+}
+
+// ─── GEÇMİŞ ──────────────────────────────────────
+async function loadHistory() {
+  try {
+    const res = await apiFetch('/history/predictions?limit=100');
+    const d   = await res.json();
+    const el  = document.getElementById('history-content');
+    el.innerHTML = d.length ? `<div class="table-wrap"><table>
+      <thead><tr><th>#</th><th>SMILES</th><th>ChEMBL ID</th><th>İsim</th><th>Tahmin</th><th>Aktif %</th><th>Güven</th><th>Tarih</th></tr></thead>
+      <tbody>${d.map((p, i) => `<tr>
+        <td style="color:var(--text-muted);font-weight:600">${i+1}</td>
+        <td class="smiles-td" title="${p.smiles}">${p.smiles}</td>
+        <td class="mono-violet">${p.chembl_id || '—'}</td>
+        <td style="color:var(--text-muted);font-size:16px">${p.chembl_name || '—'}</td>
+        <td><span class="badge ${p.prediction}">${p.prediction === 'active' ? '✓ Aktif' : '✗ İnaktif'}</span></td>
+        <td class="mono-teal">${(p.prob_active * 100).toFixed(1)}%</td>
+        <td class="mono-muted">${p.confidence.toFixed(1)}%</td>
+        <td style="color:var(--text-muted);font-size:16px">${fmtDate(p.created_at)}</td>
+      </tr>`).join('')}</tbody></table></div>`
+    : `<div class="empty-state"><div class="empty-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><p>Henüz analiz yapılmadı</p></div>`;
+  } catch(e) {
+    document.getElementById('history-content').innerHTML = `<div class="empty-state"><p style="color:var(--rose)">⚠ ${e.message}</p></div>`;
+  }
+}
+
+// ─── ADMIN ────────────────────────────────────────
+async function loadAdminUsers() {
+  document.getElementById('admin-users-content').innerHTML = '<div class="empty-state"><div class="empty-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><p>Yükleniyor...</p></div>';
+  try {
+    const res = await apiFetch('/admin/users');
+    if (!res.ok) throw new Error('Erişim reddedildi');
+    const users   = await res.json();
+    const total   = users.length;
+    const admins  = users.filter(u => u.role === 'admin').length;
+    document.getElementById('au-total').textContent     = total;
+    document.getElementById('au-biologist').textContent = total - admins;
+    document.getElementById('au-admin').textContent     = admins;
+    document.getElementById('au-count-label').textContent = total + ' kullanıcı';
+    const maxPred = Math.max(...users.map(u => u.tahmin_sayisi || 0), 1);
+    document.getElementById('admin-users-content').innerHTML = `
+      <div class="table-wrap"><table>
+        <thead><tr><th>#</th><th>Ad Soyad</th><th>E-posta</th><th>Rol</th><th>Tahmin</th><th>Kayıt Tarihi</th></tr></thead>
+        <tbody>${users.map((u, i) => `<tr>
+          <td style="color:var(--text-muted);font-weight:600">${i+1}</td>
+          <td style="font-weight:600">${u.full_name}</td>
+          <td style="color:var(--text-muted);font-size:16px">${u.email}</td>
+          <td><span class="badge ${u.role}">${u.role === 'admin' ? 'Admin' : 'Biyolog'}</span></td>
+          <td>
+            <span class="mono-violet">${u.tahmin_sayisi || 0}</span>
+            <div class="progress-mini" style="max-width:80px;margin-top:4px"><div class="progress-mini-fill" style="width:${Math.round(((u.tahmin_sayisi||0)/maxPred)*100)}%"></div></div>
+          </td>
+          <td style="color:var(--text-muted);font-size:16px">${fmtDate(u.created_at)}</td>
+        </tr>`).join('')}</tbody></table></div>`;
+  } catch(e) {
+    document.getElementById('admin-users-content').innerHTML = `<div class="empty-state"><p style="color:var(--rose)">⚠ ${e.message}</p></div>`;
+  }
+}
+
+async function loadAdminStats() {
+  document.getElementById('admin-stats-tbody').innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--text-muted);">Yükleniyor...</td></tr>';
+  try {
+    const res = await apiFetch('/admin/stats');
+    if (!res.ok) throw new Error('Erişim reddedildi');
+    const s = await res.json();
+    document.getElementById('as-users').textContent    = s.toplam_kullanici;
+    document.getElementById('as-preds').textContent    = s.toplam_tahmin;
+    document.getElementById('as-chembl').textContent   = s.chembl_eslesen;
+    document.getElementById('as-active').textContent   = s.aktif_tahmin;
+    document.getElementById('as-inactive').textContent = s.inaktif_tahmin;
+    const rate = s.aktif_oran || 0;
+    document.getElementById('rate-pct-big').textContent   = rate + '%';
+    document.getElementById('rate-ring-text').textContent = rate + '%';
+    setTimeout(() => { document.getElementById('rate-circle').style.strokeDashoffset = 201 - (201 * (rate/100)); }, 100);
+    const total = s.toplam_tahmin || 1;
+    const aPct  = Math.round((s.aktif_tahmin / total) * 100);
+    document.getElementById('bar-active').style.width    = aPct + '%';
+    document.getElementById('bar-inactive').style.width  = (100 - aPct) + '%';
+    document.getElementById('bar-active-lbl').textContent   = 'Aktif ' + aPct + '%';
+    document.getElementById('bar-inactive-lbl').textContent = 'İnaktif ' + (100-aPct) + '%';
+    document.getElementById('admin-stats-tbody').innerHTML = [
+      ['toplam_kullanici', s.toplam_kullanici, 'Sisteme kayıtlı toplam kullanıcı'],
+      ['toplam_tahmin',    s.toplam_tahmin,    'Tüm kullanıcıların tekil tahmin sayısı'],
+      ['aktif_tahmin',     s.aktif_tahmin,     'Aktif sınıfına düşen tahmin sayısı'],
+      ['inaktif_tahmin',   s.inaktif_tahmin,   'İnaktif sınıfına düşen tahmin sayısı'],
+      ['toplam_batch',     s.toplam_batch,     'CSV toplu analiz iş sayısı'],
+      ['chembl_eslesen',   s.chembl_eslesen,   'ChEMBL veritabanında eşlenen tahminler'],
+      ['aktif_oran',       s.aktif_oran + '%', 'Aktif tahmin / toplam tahmin × 100'],
+    ].map(([k, v, a]) => `<tr>
+      <td class="mono-violet">${k}</td>
+      <td style="font-size:26px;font-weight:800;color:var(--text-primary)">${v}</td>
+      <td style="color:var(--text-muted);font-size:17px">${a}</td>
+    </tr>`).join('');
+  } catch(e) {
+    document.getElementById('admin-stats-tbody').innerHTML = `<tr><td colspan="3" style="text-align:center;color:var(--rose)">⚠ ${e.message}</td></tr>`;
+  }
+}
+
+// ─── YARDIMCI ─────────────────────────────────────
+async function apiFetch(path, method = 'GET', body = null) {
+  const o = { method, headers: { 'Content-Type': 'application/json' } };
+  if (TOKEN) o.headers['Authorization'] = 'Bearer ' + TOKEN;
+  if (body)  o.body = JSON.stringify(body);
+  return fetch(API + path, o);
+}
+
+function loader(v, msg = 'İşleniyor...') {
+  document.getElementById('loader').classList.toggle('show', v);
+  document.getElementById('loader-text').textContent = msg;
+}
+
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = '⚠ ' + msg;
+  el.classList.add('show');
+}
+
+function hideErr(id) { document.getElementById(id).classList.remove('show'); }
+
+function notify(msg) {
+  document.getElementById('notif-text').textContent = msg;
+  const n = document.getElementById('notif');
+  n.classList.add('show');
+  setTimeout(() => n.classList.remove('show'), 3500);
+}
+
+function fmtDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('tr-TR') + ' ' + d.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+}
+</script>
+</body>
+</html>
